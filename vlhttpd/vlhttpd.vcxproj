@@ -64,10 +64,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="http.h" />
     <ClInclude Include="HttpTask.h" />
+    <ClInclude Include="mod.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp" />
+    <ClCompile Include="mod.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
