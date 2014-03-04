@@ -94,6 +94,10 @@ publish/
 
 # Publish Web Output
 *.Publish.xml
+<<<<<<< HEAD
+=======
+*.pubxml
+>>>>>>> ccb8f0184f3b52cdcd6f98d6edf6b174348c521b
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
@@ -132,12 +136,15 @@ UpgradeLog*.htm
 App_Data/*.mdf
 App_Data/*.ldf
 
+<<<<<<< HEAD
 
 #LightSwitch generated files
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
+=======
+>>>>>>> ccb8f0184f3b52cdcd6f98d6edf6b174348c521b
 # =========================
 # Windows detritus
 # =========================
@@ -152,5 +159,9 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+<<<<<<< HEAD
 # Mac desktop service store files
+=======
+# Mac crap
+>>>>>>> ccb8f0184f3b52cdcd6f98d6edf6b174348c521b
 .DS_Store
