@@ -73,6 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClientAccept.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />

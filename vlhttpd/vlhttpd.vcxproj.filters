@@ -26,8 +26,8 @@
     </ClInclude>
     <ClInclude Include="HttpParser.h">
       <Filter>头文件</Filter>
-    </ClInclude>    
-	<ClInclude Include="debug.h">
+    </ClInclude>
+    <ClInclude Include="debug.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="netfront.h">
@@ -35,8 +35,8 @@
     </ClInclude>
     <ClInclude Include="vServer.h">
       <Filter>头文件</Filter>
-    </ClInclude> 
-	<ClInclude Include="ClientAccept.h">
+    </ClInclude>
+    <ClInclude Include="ClientAccept.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
