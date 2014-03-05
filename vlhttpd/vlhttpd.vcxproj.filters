@@ -24,12 +24,18 @@
     <ClInclude Include="http.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="HttpParser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="mod.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpParser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

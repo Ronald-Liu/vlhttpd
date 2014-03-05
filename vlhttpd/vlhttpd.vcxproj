@@ -65,10 +65,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="http.h" />
+    <ClInclude Include="HttpParser.h" />
     <ClInclude Include="HttpTask.h" />
     <ClInclude Include="mod.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HttpParser.cpp" />
     <ClCompile Include="HttpTask.cpp" />
     <ClCompile Include="mod.cpp" />
   </ItemGroup>
