@@ -25,9 +25,10 @@ std::string parseRequest(HttpTask *task){
 	return task->internData["RequestURI"];
 }
 //将processStr以分隔符separator分割成两部分，一部分返回，另一部分放到processStr
-std::string split(std::string processStr, std::string separator){
+std::string split(std::string &processStr, std::string separator){
 	int index = processStr.find(separator);
 	std::string splitStr = processStr.substr(0, index);
-	processStr = processStr.substr(index + separator.size());
+	processStr.erase(0, index + separator.size());
+	//processStr = processStr.substr(index + separator.size());
 	return splitStr;
 }
