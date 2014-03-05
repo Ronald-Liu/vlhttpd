@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClientAccept.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="HttpTask.h" />

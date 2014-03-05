@@ -27,6 +27,9 @@
     <ClInclude Include="HttpParser.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ClientAccept.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
