@@ -38,7 +38,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)yaml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)yaml\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionPath)yaml\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionPath)yaml\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -47,6 +54,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -61,19 +69,25 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClientAccept.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="HttpTask.h" />
     <ClInclude Include="mod.h" />
+    <ClInclude Include="netfront.h" />
+    <ClInclude Include="vServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpParser.cpp" />
     <ClCompile Include="HttpTask.cpp" />
     <ClCompile Include="mod.cpp" />
+    <ClCompile Include="netfront.cpp" />
+    <ClCompile Include="unittest_portServer.cpp" />
+    <ClCompile Include="vServer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,8 +26,17 @@
     </ClInclude>
     <ClInclude Include="HttpParser.h">
       <Filter>头文件</Filter>
+    </ClInclude>    
+	<ClInclude Include="debug.h">
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ClientAccept.h">
+    <ClInclude Include="netfront.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude> 
+	<ClInclude Include="ClientAccept.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -39,6 +48,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="HttpParser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="netfront.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unittest_portServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
