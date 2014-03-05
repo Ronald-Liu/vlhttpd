@@ -24,12 +24,30 @@
     <ClInclude Include="http.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="netfront.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="mod.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="netfront.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unittest_portServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
