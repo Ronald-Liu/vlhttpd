@@ -3,6 +3,7 @@
 #include <mswsock.h>
 #include <list>
 #include <deque>
+#include "HttpParser.h"
 
 typedef struct _addrPair{
 	ULONG addrLocal;
@@ -24,9 +25,10 @@ typedef struct _workerParams
 
 typedef struct _clientParams
 {
-	SOCKET cSock;
-	void(*handler)(HttpTask*);
+	SOCKET cSock;				//Client socket
+	void(*handler)(HttpTask*);	//Handler which will be called when all data have arrived
 	HttpTask* task;
+	HttpParser* parser;
 	clientStatus status;
 	size_t totalLen;
 	std::list<WSABUF> inBuffer;
@@ -65,6 +67,7 @@ void assembleBuffer(clientParams* cParams)
 void releaseClient(clientParams* cParams)
 {
 	delete cParams->task;
+	delete cParams->parser;
 	closesocket(cParams->cSock);
 	delete cParams;
 	//cParams->bufferOffset = cParams->inBuffer.begin();
@@ -101,9 +104,11 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 		auto olPlus = (overlappedPlus*)ioOverlapped;
 		cParams = olPlus->cParams;
 
+		cParams->inBuffer.back().len = length;
+		cParams->totalLen += length;
 		if (cParams->status==clientStatus::Reading&&isTransmitComplete(cParams))
 		{
-			//Transmit complete, Do http processing
+			//Transmit complete, Do processing
 			assembleBuffer(cParams);
 			cParams->handler(cParams->task);
 			releaseClient(cParams);
@@ -113,17 +118,14 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 			//When stream is closed
 			delete cParams->inBuffer.back().buf;
 			cParams->inBuffer.pop_back();
+
 			assembleBuffer(cParams);
 			cParams->handler(cParams->task);
 			releaseClient(cParams);
 		}
 		else
 		{
-			auto pEnd = cParams->inBuffer.end();
-			pEnd--;
-			pEnd->len = ioOverlapped->InternalHigh;
-			cParams->totalLen += pEnd->len;
-			//Transmit not complete. 
+			//Transmit not complete, issus another recv
 			issusAsyncRecv(cParams, ioOverlapped);
 		}
 	}
@@ -151,6 +153,7 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 		cParam->totalLen = 0;
 		cParam->status = clientStatus::Ready;
 		cParam->handler = sParam->handler;
+		cParam->parser = new HttpParser();
 
 		auto olPlus = new overlappedPlus();
 		olPlus->cParams = cParam;
