@@ -8,9 +8,10 @@ enum RequestVersion {HTTP0, HTTP1} REQUEST_VERSION;
 class HttpParser
 {
 public:
-	std::string parseRequest(HttpTask *task);
+	std::string* parseRequest(HttpTask *task);
+	~HttpParser();
 private:
-	std::string split(std::string processStr, std::string separator);
+	std::string split(std::string& processStr, std::string separator);
 };
 
 #endif
