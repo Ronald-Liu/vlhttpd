@@ -80,8 +80,10 @@ void issusAsyncRecv(clientParams* cParams, OVERLAPPED* ioOverlapped)
 	auto i = cParams->inBuffer.end();
 	i--;
 	DWORD flag = 0;
-	if (WSARecv(cParams->cSock, &(*(i)), 1, NULL, &flag, ioOverlapped, NULL) != WSA_IO_PENDING)
-		printError("WSA recv Error: %d\n", WSAGetLastError());
+	int err = WSARecv(cParams->cSock, &(*(i)), 1, NULL, &flag, ioOverlapped, NULL);
+	int WSAError = WSAGetLastError();
+	if (err == SOCKET_ERROR && WSAError!= WSA_IO_PENDING)
+		printError("WSA recv Error:%d\n",WSAError);
 }
 
 DWORD WINAPI workerLoop(PVOID pvParam)
@@ -95,8 +97,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 	
 	while(GetQueuedCompletionStatus(param->completePort,&length, &paramPtr,&ioOverlapped,INFINITE))
 	{
-		printf("length:%d", length);
-		printf("One complete\n");
+		printf("Length:%d\n",length);
 		auto olPlus = (overlappedPlus*)ioOverlapped;
 		cParams = olPlus->cParams;
 
