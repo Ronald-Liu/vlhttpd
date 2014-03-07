@@ -3,7 +3,6 @@
 #include <string>
 #include <list>
 #include "HttpTask.h"
-#include "ClientAccept.h"
 
 class HttpParser
 {

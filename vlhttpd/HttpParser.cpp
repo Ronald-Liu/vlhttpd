@@ -43,14 +43,6 @@ bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
 		}
 	}
 }
-//将processStr以分隔符separator分割成两部分，一部分返回，另一部分放到processStr
-std::string HttpParser::split(std::string &processStr, std::string separator){
-	int index = processStr.find(separator);
-	std::string splitStr = processStr.substr(0, index);
-	processStr.erase(0, index + separator.size());
-	//processStr = processStr.substr(index + separator.size());
-	return splitStr;
-}
 //处理原始请求，返回请求的uri
 std::string HttpParser::parseRequest(HttpTask *task){
 	HttpRequest request = task->request;
