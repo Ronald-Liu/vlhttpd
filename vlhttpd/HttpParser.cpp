@@ -1,4 +1,46 @@
 #include "HttpParser.h"
+bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
+	auto i = inBuffer.end();
+	i--;
+	if (inBuffer.size() == 1) {//request首部包含在第一个数据包内
+		std::string pocketStr = (*i).buf;
+		int pocketLen = (*i).len;
+		int posOfContentLength = pocketStr.find("Content-Length:");
+		if (posOfContentLength != std::string::npos) {//首部含有Content-Length域
+			//取出Content-Length的值
+			posOfContentLength += strlen("Content-Length:");
+			if (pocketStr[posOfContentLength] == ' ')
+				posOfContentLength++;
+			std::string contentLengthStr;
+			while (pocketStr[posOfContentLength] >= '0' && pocketStr[posOfContentLength] <= '9')
+				contentLengthStr += pocketStr[posOfContentLength++];
+			contentLength = atoi(contentLengthStr.c_str());
+
+			//figure out bytes of header
+			int numOfHeader = pocketStr.find("\r\n\r\n");
+			numOfHeader += strlen("\r\n\r\n");
+
+			if (contentLength <= pocketLen - numOfHeader)//entity-body全部包含在本数据包中
+				return true;
+			else {
+				//计算entity-body剩余数据的长度
+				remainBytes = contentLength - (pocketLen - numOfHeader);
+				return false;
+			}
+		}
+		else//数据包只含request header
+			return true;
+	}
+	else{
+		int pocketLen = (*i).len;
+		if (remainBytes <= pocketLen)
+			return true;
+		else {
+			remainBytes -= pocketLen;
+			return false;
+		}
+	}
+}
 //处理原始请求，存放到map中，返回请求的uri
 std::string *HttpParser::parseRequest(HttpTask *task){
 	std::string processStr = task->rawData;
