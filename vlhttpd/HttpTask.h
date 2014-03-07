@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include <map>
 #include "http.h"
+#include "HttpRequest.h"
 
 class HttpTask
 {
@@ -13,8 +14,10 @@ public:
 	std::map<std::string, void*> internData;
 	char* rawData;
 	size_t rawDataLen;
+	HttpRequest request;
 	~HttpTask();
 private:
 	SOCKET mSock;
 };
+
 #endif

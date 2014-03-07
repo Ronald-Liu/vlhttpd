@@ -73,10 +73,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClientAccept.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />
+    <ClInclude Include="HttpRequest.h" />
     <ClInclude Include="HttpTask.h" />
     <ClInclude Include="mod.h" />
     <ClInclude Include="netfront.h" />

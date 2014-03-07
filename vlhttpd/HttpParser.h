@@ -4,13 +4,13 @@
 #include <list>
 #include "HttpTask.h"
 #include "ClientAccept.h"
-enum RequestMethod;
-enum RequestVersion;
+
 class HttpParser
 {
 public:
-	std::string* parseRequest(HttpTask *task);
+	//std::string* parseRequest(HttpTask *task);
 	bool isEnding(std::list<WSABUF> &inBuffer);
+	std::string parseRequest(HttpTask *task);
 	~HttpParser();
 private:
 	std::string split(std::string& processStr, std::string separator);

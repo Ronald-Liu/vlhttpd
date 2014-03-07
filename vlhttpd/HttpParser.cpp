@@ -1,7 +1,6 @@
 #include "HttpParser.h"
 
-enum RequestMethod { GET, POST } REQUEST_METHOD;
-enum RequestVersion { HTTP0, HTTP1 } REQUEST_VERSION;
+
 bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
 	auto lastPack = inBuffer.end();
 	lastPack--;
@@ -44,56 +43,68 @@ bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
 		}
 	}
 }
-//处理原始请求，存放到map中，返回请求的uri
-std::string *HttpParser::parseRequest(HttpTask *task){
+//将processStr以分隔符separator分割成两部分，一部分返回，另一部分放到processStr
+std::string HttpParser::split(std::string &processStr, std::string separator){
+	int index = processStr.find(separator);
+	std::string splitStr = processStr.substr(0, index);
+	processStr.erase(0, index + separator.size());
+	//processStr = processStr.substr(index + separator.size());
+	return splitStr;
+}
+//处理原始请求，返回请求的uri
+std::string HttpParser::parseRequest(HttpTask *task){
+	HttpRequest request = task->request;
 	std::string processStr = task->rawData;
 	//process requset line
 	std::string requestLine = split(processStr, "\r\n");
 
 	std::string requestMethod = split(requestLine, " ");
 	if (requestMethod.compare("GET") == 0) {
-		REQUEST_METHOD = GET;
+		request.setRequestMethod(GET);
 	}
 	else {
 		if (requestMethod.compare("POST") == 0)
-			REQUEST_METHOD = POST;
+			request.setRequestMethod(POST);
 	}
-	task->internData["RequestMethod"] = (void *)REQUEST_METHOD;
 
-	std::string *requestURI = new std::string(split(requestLine, " "));
-	task->internData["RequestURI"] = (void *)requestURI;
+	std::string requestURI = split(requestLine, " ");
+	request.setRequestURI(requestURI);
 
 	/*
 	std::string requestVersion = split(requestLine, " ");
 	task->internData["RequestVersion"] = requestVersion;
 	*/
-	ClientAccept *accept = new ClientAccept();
 	std::string headerLine = split(processStr, "\r\n");
 	while (headerLine != "" && processStr != ""){
 		std::string key = split(headerLine, ":");
 		if (key.compare("Accept") == 0) {
 			if (headerLine.find("*/*") != std::string::npos)
-				accept->setAnyTpye();
+				request.setAnyTpye();
 			else {
 				if (headerLine.find("text/html") != std::string::npos)
-					accept->setText_HtmlTpye();
+					request.setText_HtmlTpye();
 			}
+		}
+		if (key.compare("Host") == 0) {
+			//delete blank 
+			if (headerLine[0] == ' ') {
+				headerLine.erase(0, 1);
+			}
+			request.setHost(headerLine);
 		}
 		if (key.compare("Accept-Language") == 0) {
 			if (headerLine.find("zh") != std::string::npos)
-				accept->setZhLanguage();
+				request.setZhLanguage();
 			else {
 				if (headerLine.find("en") != std::string::npos)
-					accept->setEnLanguage();
+					request.setEnLanguage();
 			}
 		}
 
-		//		task->internData[key] = headerLine;
 		headerLine = split(processStr, "\r\n");
 	}
-	task->internData["Accept"] = (void *)accept;
 
-	return (std::string *)(task->internData["RequestURI"]);
+	return request.getRequestURI();
 }
 //将processStr以分隔符separator分割成两部分，一部分返回，另一部分放到processStr
 std::string HttpParser::split(std::string &processStr, std::string separator){
@@ -103,7 +114,6 @@ std::string HttpParser::split(std::string &processStr, std::string separator){
 	//processStr = processStr.substr(index + separator.size());
 	return splitStr;
 }
-
 HttpParser::~HttpParser(){
 	
 }
