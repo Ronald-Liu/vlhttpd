@@ -70,7 +70,6 @@ void releaseClient(clientParams* cParams)
 	delete cParams->parser;
 	closesocket(cParams->cSock);
 	delete cParams;
-	//cParams->bufferOffset = cParams->inBuffer.begin();
 }
 
 void issusAsyncRecv(clientParams* cParams, OVERLAPPED* ioOverlapped)
