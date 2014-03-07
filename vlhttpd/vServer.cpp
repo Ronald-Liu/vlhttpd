@@ -43,11 +43,7 @@ typedef struct _overlappedPlus
 
 BOOL isTransmitComplete(clientParams* cParams)
 {
-	auto pEnd = cParams->inBuffer.end();
-	pEnd--;
-	if ((pEnd->len == 0)||(pEnd)->buf[0] == '\n')
-		return true;
-	return false;
+	return cParams->parser->isEnding(cParams->inBuffer);
 }
 
 void assembleBuffer(clientParams* cParams)
@@ -88,6 +84,14 @@ void issusAsyncRecv(clientParams* cParams, OVERLAPPED* ioOverlapped)
 		printError("WSA recv Error:%d\n",WSAError);
 }
 
+void HTTPProc(clientParams* cParams)
+{
+	assembleBuffer(cParams);
+	cParams->parser->parseRequest(cParams->task);
+	cParams->handler(cParams->task);
+	releaseClient(cParams);
+}
+
 DWORD WINAPI workerLoop(PVOID pvParam)
 {
 	printf("worker ready complete\n");
@@ -99,7 +103,6 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 	
 	while(GetQueuedCompletionStatus(param->completePort,&length, &paramPtr,&ioOverlapped,INFINITE))
 	{
-		printf("Length:%d\n",length);
 		auto olPlus = (overlappedPlus*)ioOverlapped;
 		cParams = olPlus->cParams;
 
@@ -108,19 +111,16 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 		if (cParams->status==clientStatus::Reading&&isTransmitComplete(cParams))
 		{
 			//Transmit complete, Do processing
-			assembleBuffer(cParams);
-			cParams->handler(cParams->task);
-			releaseClient(cParams);
+			HTTPProc(cParams);
 		}
 		else if (length==0)
 		{
 			//When stream is closed
+			//Remove the last packet whose length=0)
 			delete cParams->inBuffer.back().buf;
 			cParams->inBuffer.pop_back();
 
-			assembleBuffer(cParams);
-			cParams->handler(cParams->task);
-			releaseClient(cParams);
+			HTTPProc(cParams);
 		}
 		else
 		{

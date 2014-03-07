@@ -1,10 +1,13 @@
 #include "HttpParser.h"
+
+enum RequestMethod { GET, POST } REQUEST_METHOD;
+enum RequestVersion { HTTP0, HTTP1 } REQUEST_VERSION;
 bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
-	auto i = inBuffer.end();
-	i--;
+	auto lastPack = inBuffer.end();
+	lastPack--;
 	if (inBuffer.size() == 1) {//request首部包含在第一个数据包内
-		std::string pocketStr = (*i).buf;
-		int pocketLen = (*i).len;
+		std::string pocketStr = (*lastPack).buf;
+		int pocketLen = (*lastPack).len;
 		int posOfContentLength = pocketStr.find("Content-Length:");
 		if (posOfContentLength != std::string::npos) {//首部含有Content-Length域
 			//取出Content-Length的值
@@ -32,7 +35,7 @@ bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
 			return true;
 	}
 	else{
-		int pocketLen = (*i).len;
+		int pocketLen = (*lastPack).len;
 		if (remainBytes <= pocketLen)
 			return true;
 		else {

@@ -4,8 +4,8 @@
 #include <list>
 #include "HttpTask.h"
 #include "ClientAccept.h"
-enum RequestMethod { GET, POST } REQUEST_METHOD;
-enum RequestVersion {HTTP0, HTTP1} REQUEST_VERSION;
+enum RequestMethod;
+enum RequestVersion;
 class HttpParser
 {
 public:
