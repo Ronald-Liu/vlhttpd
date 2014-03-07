@@ -1,8 +1,8 @@
 #ifndef _HTTPREQUEST_H_
 #define _HTTPREQUEST_H_
 #include <string>
-enum RequestMethod { GET, POST } REQUEST_METHOD;
-enum RequestVersion { HTTP0, HTTP1 } REQUEST_VERSION;
+enum RequestMethod { GET, POST } ;
+enum RequestVersion { HTTP0, HTTP1 } ;
 
 class HttpRequest
 {
