@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="debug.h" />
+    <ClInclude Include="FileUtil.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="HttpRequest.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="vServer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="HttpParser.cpp" />
     <ClCompile Include="HttpTask.cpp" />
     <ClCompile Include="mod.cpp" />

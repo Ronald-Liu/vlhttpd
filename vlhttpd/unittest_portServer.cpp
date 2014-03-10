@@ -5,7 +5,8 @@
 
 void whenRecv(HttpTask* task)
 {
-	std::cout << *((std::string*) task->internData["RequestURI"]);
+	//std::cout << *((std::string*) task->internData["RequestURI"]);
+	std::cout << task->request.getRequestURI() << std::endl;
 	task->writeBack("Hello world", 11);
 }
 
