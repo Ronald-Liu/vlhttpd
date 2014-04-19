@@ -9,6 +9,4 @@ HttpTask::~HttpTask()
 {
 	delete rawData;
 	//ToDo: Release internData
-	delete internData["Accept"];
-	delete internData["RequestURI"];
 }

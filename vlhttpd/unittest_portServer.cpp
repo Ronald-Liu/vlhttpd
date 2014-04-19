@@ -5,8 +5,8 @@
 #include "router.h"
 void whenRecv(HttpTask* task)
 {
-	task->runner->run(task);
-	std::cout << *((std::string*) task->internData["LocalPath"]);
+	//std::cout << *((std::string*) task->internData["RequestURI"]);
+	std::cout << task->request.getRequestURI() << std::endl;
 	task->writeBack("Hello world", 11);
 }
 

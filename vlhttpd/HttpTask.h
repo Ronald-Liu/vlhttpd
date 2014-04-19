@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include <map>
 #include "http.h"
+#include "HttpRequest.h"
 class modRunner;
 
 class HttpTask
@@ -15,8 +16,10 @@ public:
 	char* rawData;
 	size_t rawDataLen;
 	modRunner* runner;
+	HttpRequest request;
 	~HttpTask();
 private:
 	SOCKET mSock;
 };
+
 #endif
