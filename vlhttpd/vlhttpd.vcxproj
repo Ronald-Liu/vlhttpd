@@ -80,6 +80,7 @@
     <ClInclude Include="HttpTask.h" />
     <ClInclude Include="mod.h" />
     <ClInclude Include="netfront.h" />
+    <ClInclude Include="router.h" />
     <ClInclude Include="vServer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,7 @@
     <ClCompile Include="HttpTask.cpp" />
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="netfront.cpp" />
+    <ClCompile Include="router.cpp" />
     <ClCompile Include="unittest_portServer.cpp" />
     <ClCompile Include="vServer.cpp" />
   </ItemGroup>

@@ -39,6 +39,9 @@
     <ClInclude Include="ClientAccept.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="router.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
@@ -57,6 +60,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="vServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="router.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,7 +4,7 @@
 #include <list>
 #include <deque>
 #include "HttpParser.h"
-
+#include "mod.h"
 typedef struct _addrPair{
 	ULONG addrLocal;
 	USHORT localPort;
@@ -48,7 +48,6 @@ BOOL isTransmitComplete(clientParams* cParams)
 
 void assembleBuffer(clientParams* cParams)
 {
-	cParams->task = new HttpTask(cParams->cSock);
 	cParams->task->rawData = new char[cParams->totalLen];
 	cParams->task->rawDataLen = cParams->totalLen;
 	int offset = 0;
@@ -92,6 +91,8 @@ void HTTPProc(clientParams* cParams)
 	releaseClient(cParams);
 }
 
+void setupModRunner(modRunner* runner);
+
 DWORD WINAPI workerLoop(PVOID pvParam)
 {
 	printf("worker ready complete\n");
@@ -100,6 +101,9 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 	ULONG paramPtr;
 	clientParams* cParams;
 	DWORD length;
+	modRunner runner;
+
+	setupModRunner(&runner);
 	
 	while(GetQueuedCompletionStatus(param->completePort,&length, &paramPtr,&ioOverlapped,INFINITE))
 	{
@@ -110,6 +114,8 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 		cParams->totalLen += length;
 		if (cParams->status==clientStatus::Reading&&isTransmitComplete(cParams))
 		{
+			cParams->task = new HttpTask(cParams->cSock);
+			cParams->task->runner = &runner;
 			//Transmit complete, Do processing
 			HTTPProc(cParams);
 		}
@@ -119,7 +125,8 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 			//Remove the last packet whose length=0)
 			delete cParams->inBuffer.back().buf;
 			cParams->inBuffer.pop_back();
-
+			cParams->task = new HttpTask(cParams->cSock);
+			cParams->task->runner = &runner;
 			HTTPProc(cParams);
 		}
 		else
