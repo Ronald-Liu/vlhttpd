@@ -1,0 +1,25 @@
+#include "Response.h"
+
+string HttpVersions::http_v1_0 = "HTTP/1.0";
+string HttpVersions::http_v1_1 = "HTTP/1.1";
+
+int main(int argc, char* argv[])
+{//only parly tested!
+
+	DefaultResponse rsp;
+
+	//rsp.setVersion(HttpVersions::http_v1_1);
+	//rsp.setStatus((new ResponseStatus())->s200_ok);
+
+	map<string,string> headers;
+	headers.insert(map<string,string>::value_type("h1","v1"));
+	headers.insert(map<string,string>::value_type("h2","v2"));
+	rsp.setHeaders(headers);
+	//rsp.printHeaders();
+	
+	cout<<rsp.getStarterHeader();
+
+	getchar();
+	return 0;
+}
+
