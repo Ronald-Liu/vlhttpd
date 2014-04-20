@@ -152,8 +152,9 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 	while (1)
 	{
 		cSock = accept(sParam->sSock, NULL,NULL);
+#ifdef DEBUG_OUTPUT_INFO
 		printf("New client\n");
-
+#endif
 		auto cParam = new clientParams();
 		cParam->cSock = cSock;
 		cParam->totalLen = 0;

@@ -4,11 +4,14 @@
 #include <string>
 #include "FileUtil.h"
 #include "router.h"
+#include "debug.h"
 void whenRecv(HttpTask* task)
 {
 	task->runner->run(task);
 	//std::cout << *((std::string*) task->internData["RequestURI"]);
+#ifdef DEBUG_OUTPUT_INFO
 	std::cout << *((std::string*)task->internData["LocalPath"]) << std::endl;
+#endif
 	//task->writeBack("Hello world", 11);
 }
 

@@ -5,8 +5,9 @@ char* err = "Error";
 void mod::writeError(HttpTask* task, HTTPErrorCode errNo, char* data, size_t len)
 {
 	task->writeBack(err, sizeof(err));
-
+#ifdef DEBUG
 	std::cout << "Error" << errNo;
+#endif
 }
 
 void modRunner::init()

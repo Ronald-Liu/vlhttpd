@@ -22,4 +22,4 @@ bool FileUtil::do_proc(HttpTask* task)
 	task->writeBack(tmp.c_str(), tmp.size());
 	fclose(fin);
 	return true;
-}	
+}
