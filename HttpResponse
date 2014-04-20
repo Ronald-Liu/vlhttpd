@@ -1,0 +1,232 @@
+#pragma once
+#include <map>
+#include <vector>
+#include <string>
+#include <WinSock2.h>
+#include <iostream>
+using namespace std;
+
+/////////////辅助类/////////////////////////////////////////////////////////////
+
+const string CRLF = "\r\n";
+const string BLANK = " ";
+
+class HttpVersions
+{
+public: 
+	static string http_v1_0;
+	static string http_v1_1;
+};
+//string HttpVersions::http_v1_0 = "HTTP/1.0";
+//string HttpVersions::http_v1_1 = "HTTP/1.1";
+//enum
+//{
+//	HTTP_OK = 200;
+//
+//}HTTP_Status;
+
+class ResponseStatus
+{
+public:
+	class HTTP_Status
+	{
+	public:
+		HTTP_Status(){}
+		string statusNum;
+		string statusDisc;
+	};
+	//提示：
+	HTTP_Status s100_continue;
+	//成功：
+    HTTP_Status s200_ok;
+	//重定向：
+	HTTP_Status s301_movedPermanently;
+	HTTP_Status s302_found;
+	HTTP_Status s303_seeOther;
+	HTTP_Status s307_temporaryRedirect;
+	//客户端错误：
+	HTTP_Status s400_badRequest;
+	HTTP_Status s403_forbidden;//一半用于不愿说明具体理由的拒绝服务
+	HTTP_Status s405_methodNotAllowed;
+	HTTP_Status s406_notAcceptable;//客户端请求的资源类型不支持
+	HTTP_Status s408_requestTimeOut;
+	HTTP_Status s411_lengthRequired;
+	HTTP_Status s413_RequestEntityTooLarge;
+	HTTP_Status s414_RequestUriTooLong;
+	HTTP_Status s415_UnsupportedMediaType;//不理解收到的实体类型
+
+	//服务器错误：
+	HTTP_Status s500_InternalServerError;
+	HTTP_Status s501_notImplement;
+	HTTP_Status s505_httpVerionNotSupport;
+
+	ResponseStatus()
+	{
+		this->initStatus();
+	}
+	void initStatus(){
+	//默认取值，可根据配置文件
+	this->s100_continue.statusDisc = "Continue";
+	this->s100_continue.statusNum = "100";
+	this->s200_ok.statusDisc = "OK";
+	this->s200_ok.statusNum = "200";
+	this->s301_movedPermanently.statusDisc = "movedPermanently";
+	this->s301_movedPermanently.statusNum = "301";
+	this->s302_found.statusDisc = "found";
+	this->s302_found.statusNum = "302";
+	this->s303_seeOther.statusDisc = "see other";
+	this->s303_seeOther.statusNum = "303";
+	this->s307_temporaryRedirect.statusDisc = "temporary redirect";
+	this->s307_temporaryRedirect.statusNum = "307";
+	this->s400_badRequest.statusDisc = "bad request";
+	this->s400_badRequest.statusNum = "400";
+	this->s403_forbidden.statusDisc = "forbidden";
+	this->s403_forbidden.statusNum = "403";
+	this->s405_methodNotAllowed.statusDisc = "method not allowed";
+	this->s405_methodNotAllowed.statusNum = "405";
+	this->s406_notAcceptable.statusDisc = "not acceptable";
+	this->s406_notAcceptable.statusNum = "406";
+	this->s408_requestTimeOut.statusDisc = "request timeout";
+	this->s408_requestTimeOut.statusNum = "408";
+	this->s411_lengthRequired.statusDisc = "length required";
+	this->s411_lengthRequired.statusNum = "411";
+	this->s413_RequestEntityTooLarge.statusDisc = "request entiry too large";
+	this->s413_RequestEntityTooLarge.statusNum = "413";
+	this->s414_RequestUriTooLong.statusDisc = "request URI too long";
+	this->s414_RequestUriTooLong.statusNum = "414";
+	this->s415_UnsupportedMediaType.statusDisc = "unsupported media type";
+	this->s415_UnsupportedMediaType.statusNum = "415";
+	this->s500_InternalServerError.statusDisc = "internal server error";
+	this->s500_InternalServerError.statusNum = "500";
+	this->s501_notImplement.statusDisc = "not implement";
+	this->s501_notImplement.statusNum = "501";
+	this->s505_httpVerionNotSupport.statusDisc = "http version not support";
+	this->s505_httpVerionNotSupport.statusNum = "505";
+	}
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+class DefaultResponse 
+{
+protected:
+	string version;
+	string respStatus;
+	string respDescription;
+	
+	map<string,string>headers;
+
+	char* entityData;//实体内容的字节序列
+	long entityLen;
+
+public:
+	DefaultResponse(){
+		this->setVersion(HttpVersions::http_v1_1);
+		this->setStatus((new ResponseStatus())->s200_ok);
+		this->entityData = NULL;
+		this->entityLen = 0;
+	}
+	//起始行：
+	void setVersion(string version){
+		this->version = version;
+	}
+	//响应状态：
+	void setStatus(ResponseStatus::HTTP_Status http_status){
+		this->respStatus = http_status.statusNum;
+		this->respDescription = http_status.statusDisc;
+	}
+	//起始行：
+	void setStartLine(string version, ResponseStatus::HTTP_Status http_status){
+		this->setVersion(version);
+		this->setStatus(http_status);
+	}
+	//首部：
+	void addHeader(string headerName, string value){
+		this->headers.insert(map<string,string>::value_type(headerName,value));
+	}
+	void setHeaders(map<string,string> headers){
+		for(map<string,string>::iterator itr=headers.begin(); itr!=headers.end(); itr++)
+			this->headers.insert(*itr);
+	}
+	void printHeaders(){
+		/*调试用*/
+		for(map<string,string>::iterator itr=headers.begin(); itr!=headers.end(); itr++)
+			cout<<(*itr).first<<","<<(*itr).second<<endl;
+	}
+	bool removeHeader(string headerName){
+		headers.erase(headerName);
+	}
+	bool removeHeaders(){
+		headers.clear();
+	}
+
+	//起始行、首部的转码：
+	bool checkCharset();//检查是否有非法字符
+	void transferSpecialChar();//将保留字符转码
+
+	//实体内容：
+	void setEntity(char* data,int offset, int len){
+		if(this->entityLen > 0)
+			this->clearEntity();
+
+		this->entityLen = len-offset-1;
+		this->entityData = (char*)malloc(this->entityLen);
+		memcpy(this->entityData,&(data[offset]),this->entityLen);
+	}
+
+	void appendEntity(char* data,int offset,int len){
+		/*尾端添加*/
+		int beforeLen = this->entityLen;
+		this->entityLen += len-offset-1;
+		this->entityData = (char*)realloc(this->entityData,this->entityLen);
+		memcpy(&(this->entityData[beforeLen]),&(data[offset]),len-offset-1);
+	}
+
+	void clearEntity(){
+		this->entityLen = 0;
+		free(this->entityData);
+		this->entityData = NULL;
+	}
+	void printEntity(){
+		/*调试用*/
+	}
+
+	//将起始行、首部转成格式化文本
+	string getStarterHeader(){
+		string txt = "";
+		txt += this->version;
+		txt += BLANK;
+		txt += this->respStatus;
+		txt += BLANK;
+		txt += respDescription;
+		txt += CRLF;
+		
+		for(map<string,string>::iterator itr=this->headers.begin(); itr!=headers.end(); ++itr){
+			string header = (*itr).first + ":" + BLANK + (*itr).second + CRLF;
+			txt += header;
+		}
+
+		txt += CRLF;
+		return txt;
+	}
+
+	//socket输出
+	int writeToSocket(SOCKET sock, int flags){
+		char* suckData;
+		int suckLen;
+
+		const char* headData = (this->getStarterHeader()).c_str();
+		int headLen = strlen(headData);
+		suckLen = headLen + this->entityLen;
+		suckData = (char*)malloc(suckLen);
+
+		memcpy(suckData,headData,headLen);
+		memcpy(&(suckData[headLen]),this->entityData,this->entityLen);
+		this->clearEntity();
+
+		return send(sock,suckData,suckLen,flags);
+	}
+
+};
