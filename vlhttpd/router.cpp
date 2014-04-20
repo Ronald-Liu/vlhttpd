@@ -1,11 +1,15 @@
 #include "router.h"
 #include <string>
 
-static std::string basePath("D:/");
 
 bool Router::do_proc(HttpTask* task)
 {
-	std::string* URI = (std::string*)task->internData["RequestURI"];
-	task->internData["LocalPath"] = new std::string(basePath.append(*URI));
+	std::string basePath("D:");
+	std::string* path = new std::string(basePath.append(task->request.getRequestURI()));
+	for (auto i = path->begin(); i != path->end(); i++)
+		if ((*i) == '/')
+			(*i) = '\\';
+	task->internData["LocalPath"] = path;
+
 	return true;
 }

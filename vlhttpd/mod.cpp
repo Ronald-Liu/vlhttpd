@@ -1,8 +1,12 @@
+#include <iostream>
 #include "mod.h"
+
 char* err = "Error";
-void mod::writeError(HttpTask* task, HTTPErrorCode errno, char* data, size_t len)
+void mod::writeError(HttpTask* task, HTTPErrorCode errNo, char* data, size_t len)
 {
 	task->writeBack(err, sizeof(err));
+
+	std::cout << "Error" << errNo;
 }
 
 void modRunner::init()

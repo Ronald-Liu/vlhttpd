@@ -5,7 +5,7 @@
 class mod
 {
 protected:
-	void writeError(HttpTask* task,HTTPErrorCode errno, char* data, size_t len);
+	void writeError(HttpTask* task,HTTPErrorCode errNo, char* data, size_t len);
 public:
 	virtual bool do_proc(HttpTask* task) = 0;
 };

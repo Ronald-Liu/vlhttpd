@@ -3,12 +3,11 @@
 #define BUFSIZE 512
 #include <string>
 #include <fstream>
-class FileUtil
+#include "mod.h"
+class FileUtil : public mod
 {
 public:
-	//文件存在返回true，否则返回false
-	bool fetchResource(std::string path, std::string& resource);
-
+	bool do_proc(HttpTask* task);
 };
 
 #endif

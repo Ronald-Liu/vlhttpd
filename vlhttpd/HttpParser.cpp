@@ -45,7 +45,7 @@ bool HttpParser::isEnding(std::list<WSABUF> &inBuffer){
 }
 //处理原始请求，返回请求的uri
 std::string HttpParser::parseRequest(HttpTask *task){
-	HttpRequest request = task->request;
+	HttpRequest& request = task->request;
 	std::string processStr = task->rawData;
 	//process requset line
 	std::string requestLine = split(processStr, "\r\n");
