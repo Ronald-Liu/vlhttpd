@@ -3,8 +3,7 @@
 
 bool FileUtil::do_proc(HttpTask* task)
 {
-	std::string& path = *((std::string*)task->internData["LocalPath"]);
-	std::string tmp;
+	std::string& path = task->LocalPath;
 	FILE* fin ;
 	if ((fin= fopen(path.c_str(), "rb")) == NULL)
 	{

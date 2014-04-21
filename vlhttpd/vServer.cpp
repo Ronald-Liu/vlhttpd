@@ -13,11 +13,6 @@ typedef struct _addrPair{
 	USHORT remotePort;
 } addrPair;
 
-typedef struct _serverParams
-{
-	SOCKET sSock;
-	void(*handler)(HttpTask*);
-}serverParams;
 
 typedef struct _workerParams
 {
@@ -96,7 +91,6 @@ void setupModRunner(modRunner* runner);
 
 DWORD WINAPI workerLoop(PVOID pvParam)
 {
-	printf("worker ready complete\n");
 	workerParams* param = (workerParams*)pvParam;
 	OVERLAPPED* ioOverlapped;
 	ULONG paramPtr;
@@ -108,6 +102,8 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 	
 	while(GetQueuedCompletionStatus(param->completePort,&length, &paramPtr,&ioOverlapped,INFINITE))
 	{
+		if (ioOverlapped == NULL)
+			break;
 		auto olPlus = (overlappedPlus*)ioOverlapped;
 		cParams = olPlus->cParams;
 
@@ -139,6 +135,9 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 			issusAsyncRecv(cParams, ioOverlapped);
 		}
 	}
+	delete param;
+	printError("Thread done");
+
 	return 0;
 }
 
@@ -148,14 +147,20 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 
 	auto sParam = (serverParams*)pvParam;
 	SOCKET cSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
-	addrPair addr;
-	workerParams wParam;
-	wParam.completePort = completionPort;
-	for (int i = 0; i < 8; i++)
-		CreateThread(NULL, 0, workerLoop, &wParam, 0,NULL);
+
+	for (int i = 0; i < sParam->numThread; i++)
+	{
+		printf("worker ready complete\n");
+		auto wParam = new workerParams();
+		wParam->completePort = completionPort;
+		CreateThread(NULL, 0, workerLoop, wParam, 0, NULL);
+	}
+
 	while (1)
 	{
 		cSock = accept(sParam->sSock, NULL,NULL);
+		if (cSock == INVALID_SOCKET)
+			break;
 #ifdef DEBUG_OUTPUT_INFO
 		printf("New client\n");
 #endif
@@ -173,6 +178,9 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 			printError("Error while set completion port :%d\n", GetLastError());
 		issusAsyncRecv(cParam,(OVERLAPPED*) olPlus);
 	}
+
+	CloseHandle(completionPort);
+	delete sParam;
 	return 0;
 }
 
@@ -204,15 +212,15 @@ portServer::portServer(USHORT port, void(*handler)(HttpTask*), ULONG vAddr)
 		closesocket(sSock);
 		return;
 	}
-	serverParams sParam;
-	sParam.sSock = sSock;
-	sParam.handler = handler;
-	hMonitorThread = CreateThread(NULL, 0, serverLoop, &sParam, 0, &idMonitorThread);
 
+	sParam = new serverParams();
+	sParam->sSock = sSock;
+	sParam->numThread = 10;
+	sParam->handler = handler;
+	hMonitorThread = CreateThread(NULL, 0, serverLoop, sParam, 0, &idMonitorThread);
 }
 
 portServer::~portServer()
 {
-	TerminateThread(hMonitorThread,0);
 	closesocket(sSock);
 }

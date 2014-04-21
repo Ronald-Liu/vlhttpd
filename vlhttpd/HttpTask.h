@@ -19,6 +19,11 @@ public:
 	modRunner* runner;
 	HttpRequest request;
 	DefaultResponse response;
+
+
+	std::string LocalPath;
+
+
 	~HttpTask();
 private:
 	SOCKET mSock;

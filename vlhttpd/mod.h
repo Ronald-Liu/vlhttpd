@@ -20,6 +20,5 @@ public:
 	void init();
 	void run(HttpTask*);
 	modRunner(){}
-	~modRunner(){ 
-	}
+	~modRunner();
 };

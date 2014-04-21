@@ -6,7 +6,6 @@
 #include <iostream>
 #include "http.h"
 #include <sstream>
-#include <vld.h>
 class HttpTask;
 using namespace std;
 
@@ -43,13 +42,13 @@ public:
 		clearEntity();
 	}
 	
-	//èµ·å§‹è¡Œï¼š
+	//ÆğÊ¼ĞĞ£º
 	void setVersion(string version);
-	//å“åº”çŠ¶æ€ï¼š
+	//ÏìÓ¦×´Ì¬£º
 	void setStatus(HTTPErrorCode http_status);
-	//èµ·å§‹è¡Œï¼š
+	//ÆğÊ¼ĞĞ£º
 	void setStartLine(string version, HTTPErrorCode http_status);
-	//é¦–éƒ¨ï¼š
+	//Ê×²¿£º
 	void addHeader(string headerName, string value);
 
 	void addHeader(string headerName, int value);
@@ -59,11 +58,11 @@ public:
 	void removeHeader(string headerName);
 	void removeHeaders();
 
-	//èµ·å§‹è¡Œã€é¦–éƒ¨çš„è½¬ç ï¼š
-	bool checkCharset();//æ£€æŸ¥æ˜¯å¦æœ‰éæ³•å­—ç¬¦
-	void transferSpecialChar();//å°†ä¿ç•™å­—ç¬¦è½¬ç 
+	//ÆğÊ¼ĞĞ¡¢Ê×²¿µÄ×ªÂë£º
+	bool checkCharset();//¼ì²éÊÇ·ñÓĞ·Ç·¨×Ö·û
+	void transferSpecialChar();//½«±£Áô×Ö·û×ªÂë
 
-	//å®ä½“å†…å®¹ï¼š
+	//ÊµÌåÄÚÈİ£º
 	void setEntity(char* data, int offset, int len);
 
 	void appendEntity(char* data, int len);
@@ -71,7 +70,7 @@ public:
 	void clearEntity();
 	void printEntity();
 
-	//å°†èµ·å§‹è¡Œã€é¦–éƒ¨è½¬æˆæ ¼å¼åŒ–æ–‡æœ¬
+	//½«ÆğÊ¼ĞĞ¡¢Ê×²¿×ª³É¸ñÊ½»¯ÎÄ±¾
 	string getStarterHeader();
 	bool writeBack(HttpTask* task);
 	

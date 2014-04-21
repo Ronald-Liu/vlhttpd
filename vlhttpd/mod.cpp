@@ -22,6 +22,15 @@ void modRunner::init()
 	}
 }
 
+modRunner::~modRunner()
+{
+	for (int i = 0; i < numMod; i++)
+	{
+		delete modList[i];
+	}
+	delete[] modList;
+}
+
 void modRunner::run(HttpTask* task)
 {
 	for (int i = 0; i < numMod; i++)

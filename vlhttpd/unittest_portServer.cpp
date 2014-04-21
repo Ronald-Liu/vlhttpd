@@ -25,6 +25,8 @@ void setupModRunner(modRunner* runner)
 int main()
 {
 	setupErrorDescriptopn();
-	portServer serv((USHORT)8081, whenRecv);
+	portServer* serv = new portServer((USHORT)8081, whenRecv);
 	Sleep(5000);
+	
+	delete serv;
 }
