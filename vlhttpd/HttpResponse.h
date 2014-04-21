@@ -80,7 +80,7 @@ class DefaultResponse : public HttpResponse
 {
 public:
 	DefaultResponse(){
-		//setVersion(HttpVersions::http_v1_1);
+		setVersion(HttpVersions::http_v1_1);
 		setStatus(HTTPErrorCode::Ok);
 	}
 };

@@ -1,6 +1,10 @@
 #include "http.h"
 #include "HttpResponse.h"
 #include "HttpTask.h"
+
+string HttpVersions::http_v1_0 = "HTTP/1.0";
+string HttpVersions::http_v1_1 = "HTTP/1.1";
+
 std::string errorDescription[600];
 void setupErrorDescriptopn(){
 	errorDescription[HTTPErrorCode::Continue] = "Continue";
@@ -90,12 +94,19 @@ void HttpResponse::clearEntity(){
 void HttpResponse::printEntity(){
 }
 
+string int2str(int value)
+{
+	stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
 //将起始行、首部转成格式化文本
 std::string HttpResponse::getStarterHeader(){
 	std::string txt = "";
 	txt += this->version;
 	txt += BLANK;
-	txt += this->respStatus;
+	txt += int2str(this->respStatus);
 	txt += BLANK;
 	txt += *respDescription;
 	txt += CRLF;

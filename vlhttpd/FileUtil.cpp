@@ -15,7 +15,7 @@ bool FileUtil::do_proc(HttpTask* task)
 	{
 		size_t readCnt = fread(buf, 1, BUFSIZE, fin);
 		//ToDo: writing without std::string
-		task->response.appendEntity(buf, BUFSIZE);
+		task->response.appendEntity(buf, readCnt);
 	}
 	//ToDo: use http response for writing back
 	task->response.writeBack(task);
