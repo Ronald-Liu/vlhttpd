@@ -4,5 +4,7 @@
 #ifdef DEBUG
 #include <cstdio>
 #define printError printf("[%s]", __FILE__), printf
+
+#define printInfo  printf
 #endif
 #endif

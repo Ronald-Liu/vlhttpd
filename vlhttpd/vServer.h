@@ -1,6 +1,7 @@
 #pragma once
 #include <WinSock2.h>
 #include "HttpTask.h"
+#include "ConfigMgr.h"
 #define COMPLETE_PORT_CONCURRENT_THREADS 4
 
 enum clientStatus{
@@ -9,18 +10,21 @@ enum clientStatus{
 };
 
 
+struct portServerConfig;
 typedef struct _serverParams
 {
 	SOCKET sSock;
 	int numThread;
-	void(*handler)(HttpTask*);
+	portServerConfig* config;
 }serverParams;
+
 class portServer
 {
 public:
-	portServer(USHORT, void(*)(HttpTask*), ULONG vAddr = INADDR_ANY);
+	portServer(portServerConfig*);
 	~portServer();
 private:
+	void initServer();
 	serverParams* sParam;
 	SOCKET sSock;
 	HANDLE hMonitorThread;

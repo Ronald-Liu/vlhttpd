@@ -48,6 +48,9 @@
     <ClInclude Include="HttpResponse.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigMgr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
@@ -62,9 +65,6 @@
     <ClCompile Include="netfront.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="unittest_portServer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="vServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -75,6 +75,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="HttpResponse.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigMgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unittest_configMgr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

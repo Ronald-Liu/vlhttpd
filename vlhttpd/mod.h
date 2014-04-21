@@ -22,3 +22,5 @@ public:
 	modRunner(){}
 	~modRunner();
 };
+#include "router.h"
+#include "FileUtil.h"

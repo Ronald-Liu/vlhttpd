@@ -5,7 +5,7 @@
 #include <deque>
 #include "HttpParser.h"
 #include "mod.h"
-#include <crtdbg.h>
+
 typedef struct _addrPair{
 	ULONG addrLocal;
 	USHORT localPort;
@@ -17,12 +17,12 @@ typedef struct _addrPair{
 typedef struct _workerParams
 {
 	HANDLE completePort;
+	modRunner* runner;
 }workerParams;
 
 typedef struct _clientParams
 {
 	SOCKET cSock;				//Client socket
-	void(*handler)(HttpTask*);	//Handler which will be called when all data have arrived
 	HttpTask* task;
 	HttpParser* parser;
 	clientStatus status;
@@ -83,11 +83,10 @@ void HTTPProc(clientParams* cParams)
 {
 	assembleBuffer(cParams);
 	cParams->parser->parseRequest(cParams->task);
-	cParams->handler(cParams->task);
+	cParams->task->runner->run(cParams->task);
 	releaseClient(cParams);
 }
 
-void setupModRunner(modRunner* runner);
 
 DWORD WINAPI workerLoop(PVOID pvParam)
 {
@@ -96,10 +95,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 	ULONG paramPtr;
 	clientParams* cParams;
 	DWORD length;
-	modRunner runner;
 
-	setupModRunner(&runner);
-	
 	while(GetQueuedCompletionStatus(param->completePort,&length, &paramPtr,&ioOverlapped,INFINITE))
 	{
 		if (ioOverlapped == NULL)
@@ -113,7 +109,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 		{
 			delete olPlus;
 			cParams->task = new HttpTask(cParams->cSock);
-			cParams->task->runner = &runner;
+			cParams->task->runner = param->runner;
 			//Transmit complete, Do processing
 			HTTPProc(cParams);
 		}
@@ -126,7 +122,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 
 			delete olPlus;
 			cParams->task = new HttpTask(cParams->cSock);
-			cParams->task->runner = &runner;
+			cParams->task->runner = param->runner;
 			HTTPProc(cParams);
 		}
 		else
@@ -135,6 +131,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 			issusAsyncRecv(cParams, ioOverlapped);
 		}
 	}
+	delete param->runner;
 	delete param;
 	printError("Thread done");
 
@@ -153,9 +150,11 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 		printf("worker ready complete\n");
 		auto wParam = new workerParams();
 		wParam->completePort = completionPort;
+		wParam->runner = new modRunner();
+		sParam->config->initModRunner(wParam->runner);
 		CreateThread(NULL, 0, workerLoop, wParam, 0, NULL);
 	}
-
+	printInfo("Port Server running");
 	while (1)
 	{
 		cSock = accept(sParam->sSock, NULL,NULL);
@@ -168,7 +167,6 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 		cParam->cSock = cSock;
 		cParam->totalLen = 0;
 		cParam->status = clientStatus::Ready;
-		cParam->handler = sParam->handler;
 		cParam->parser = new HttpParser();
 
 		auto olPlus = new overlappedPlus();
@@ -184,7 +182,7 @@ DWORD WINAPI serverLoop(PVOID pvParam)
 	return 0;
 }
 
-portServer::portServer(USHORT port, void(*handler)(HttpTask*), ULONG vAddr)
+portServer::portServer(portServerConfig* config)
 {
 	WSADATA wsa = { 0 };
 	WSAStartup(MAKEWORD(2, 2), &wsa);
@@ -193,11 +191,11 @@ portServer::portServer(USHORT port, void(*handler)(HttpTask*), ULONG vAddr)
 		printError("%d\n", GetLastError());
 		return;
 	}
-	
+
 	SOCKADDR_IN sAddr;
 	sAddr.sin_family = AF_INET;
-	sAddr.sin_port = htons(port);
-	sAddr.sin_addr.s_addr = vAddr;
+	sAddr.sin_port = htons(config->lPort);
+	sAddr.sin_addr.s_addr = config->lHost;
 
 	if (bind(sSock, (LPSOCKADDR)&sAddr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
 	{
@@ -216,8 +214,9 @@ portServer::portServer(USHORT port, void(*handler)(HttpTask*), ULONG vAddr)
 	sParam = new serverParams();
 	sParam->sSock = sSock;
 	sParam->numThread = 10;
-	sParam->handler = handler;
+	sParam->config = config;
 	hMonitorThread = CreateThread(NULL, 0, serverLoop, sParam, 0, &idMonitorThread);
+
 }
 
 portServer::~portServer()

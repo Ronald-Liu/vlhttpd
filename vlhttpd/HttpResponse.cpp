@@ -83,10 +83,8 @@ void HttpResponse::setEntity(char* data, int offset, int len){
 void HttpResponse::appendEntity(char* data, int len){
 	int beforeLen = this->entityLen;
 	this->entityLen += len;
-	char* tmpEntityData = (char*)realloc(this->entityData, this->entityLen);
-	if (tmpEntityData != entityData)
-		free(entityData);
-	entityData = tmpEntityData;
+	entityData = (char*)realloc(this->entityData, this->entityLen);
+
 	memcpy(&(this->entityData[beforeLen]), data, len);
 }
 

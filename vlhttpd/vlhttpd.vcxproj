@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)yaml\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)yaml\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)json\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)json;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionPath)yaml\include;$(IncludePath)</IncludePath>
@@ -53,10 +53,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>stdafx.h;</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>json_vc71_libmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConfigMgr.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="http.h" />
@@ -88,6 +90,7 @@
     <ClInclude Include="vServer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConfigMgr.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="HttpParser.cpp" />
     <ClCompile Include="HttpResponse.cpp" />
@@ -95,7 +98,7 @@
     <ClCompile Include="mod.cpp" />
     <ClCompile Include="netfront.cpp" />
     <ClCompile Include="router.cpp" />
-    <ClCompile Include="unittest_portServer.cpp" />
+    <ClCompile Include="unittest_configMgr.cpp" />
     <ClCompile Include="vServer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
