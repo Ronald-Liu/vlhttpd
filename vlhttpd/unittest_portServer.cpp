@@ -5,6 +5,7 @@
 #include "FileUtil.h"
 #include "router.h"
 #include "debug.h"
+#include "http.h"
 void whenRecv(HttpTask* task)
 {
 	task->runner->run(task);
@@ -25,6 +26,7 @@ void setupModRunner(modRunner* runner)
 
 int main()
 {
+	setupErrorDescriptopn();
 	portServer serv((USHORT)8081, whenRecv);
 	Sleep(100000000);
 }

@@ -7,19 +7,18 @@ bool FileUtil::do_proc(HttpTask* task)
 	FILE* fin ;
 	if ((fin= fopen(path.c_str(), "rb")) == NULL)
 	{
-		writeError(task, HTTPErrorCode::NOT_FOUND, "", 0);
+		writeError(task, HTTPErrorCode::NotFound, "", 0);
 		return false;
 	}
 	char buf[BUFSIZE];
-	size_t readBytes;
 	while (!feof(fin))
 	{
-		int readCnt = fread(buf, 1, BUFSIZE, fin);
+		size_t readCnt = fread(buf, 1, BUFSIZE, fin);
 		//ToDo: writing without std::string
-		tmp.append(buf, readCnt);
+		task->response.appendEntity(buf, BUFSIZE);
 	}
 	//ToDo: use http response for writing back
-	task->writeBack(tmp.c_str(), tmp.size());
+	task->response.writeBack(task);
 	fclose(fin);
 	return true;
 }

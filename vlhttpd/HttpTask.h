@@ -4,6 +4,7 @@
 #include <map>
 #include "http.h"
 #include "HttpRequest.h"
+#include "HttpResponse.h"
 class modRunner;
 
 class HttpTask
@@ -17,6 +18,7 @@ public:
 	size_t rawDataLen;
 	modRunner* runner;
 	HttpRequest request;
+	DefaultResponse response;
 	~HttpTask();
 private:
 	SOCKET mSock;
