@@ -1,3 +1,4 @@
+#include "debug.h"
 #include "http.h"
 #include "HttpResponse.h"
 #include "HttpTask.h"
@@ -82,7 +83,10 @@ void HttpResponse::setEntity(char* data, int offset, int len){
 void HttpResponse::appendEntity(char* data, int len){
 	int beforeLen = this->entityLen;
 	this->entityLen += len;
-	this->entityData = (char*)realloc(this->entityData, this->entityLen);
+	char* tmpEntityData = (char*)realloc(this->entityData, this->entityLen);
+	if (tmpEntityData != entityData)
+		free(entityData);
+	entityData = tmpEntityData;
 	memcpy(&(this->entityData[beforeLen]), data, len);
 }
 

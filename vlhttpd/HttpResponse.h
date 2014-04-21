@@ -6,6 +6,7 @@
 #include <iostream>
 #include "http.h"
 #include <sstream>
+#include <vld.h>
 class HttpTask;
 using namespace std;
 

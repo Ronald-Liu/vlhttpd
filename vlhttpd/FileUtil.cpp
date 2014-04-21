@@ -1,3 +1,4 @@
+#include "debug.h"
 #include "FileUtil.h"
 
 bool FileUtil::do_proc(HttpTask* task)
@@ -14,10 +15,8 @@ bool FileUtil::do_proc(HttpTask* task)
 	while (!feof(fin))
 	{
 		size_t readCnt = fread(buf, 1, BUFSIZE, fin);
-		//ToDo: writing without std::string
 		task->response.appendEntity(buf, readCnt);
 	}
-	//ToDo: use http response for writing back
 	task->response.writeBack(task);
 	fclose(fin);
 	return true;

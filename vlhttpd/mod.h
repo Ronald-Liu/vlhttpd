@@ -20,5 +20,6 @@ public:
 	void init();
 	void run(HttpTask*);
 	modRunner(){}
-	~modRunner(){ delete [] modList; }
+	~modRunner(){ 
+	}
 };

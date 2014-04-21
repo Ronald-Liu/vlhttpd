@@ -1,10 +1,11 @@
-#include "vServer.h"
 #include "debug.h"
+#include "vServer.h"
 #include <mswsock.h>
 #include <list>
 #include <deque>
 #include "HttpParser.h"
 #include "mod.h"
+#include <crtdbg.h>
 typedef struct _addrPair{
 	ULONG addrLocal;
 	USHORT localPort;
@@ -114,6 +115,7 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 		cParams->totalLen += length;
 		if (cParams->status==clientStatus::Reading&&isTransmitComplete(cParams))
 		{
+			delete olPlus;
 			cParams->task = new HttpTask(cParams->cSock);
 			cParams->task->runner = &runner;
 			//Transmit complete, Do processing
@@ -125,6 +127,8 @@ DWORD WINAPI workerLoop(PVOID pvParam)
 			//Remove the last packet whose length=0)
 			delete cParams->inBuffer.back().buf;
 			cParams->inBuffer.pop_back();
+
+			delete olPlus;
 			cParams->task = new HttpTask(cParams->cSock);
 			cParams->task->runner = &runner;
 			HTTPProc(cParams);
