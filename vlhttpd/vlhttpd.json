@@ -1,0 +1,27 @@
+[
+//Server 1
+{
+	"host":"0.0.0.0",
+	"port":8081,
+	"threads":10,
+	"vserver":
+	[
+		{	"hostName":"127.0.0.1",
+			"defaultPage":"index.html",
+			"rules":[
+				{"URI":"/", "Path":"D:\\www"},
+				{"URI":"/static", "Path":"D:\\static"},
+			]
+		},
+
+		{
+			"hostName":"localhost",
+			"defaultPage":"index.html",
+			"rules":[
+				{"URI":"/", "Path":"D:\\local"},
+				{"URI":"/static", "Forbidden":true},
+			]
+		}
+	]
+}
+]
