@@ -1,9 +1,11 @@
 #include "ConfigMgr.h"
-
+void setupErrorDescription();
 int main()
 {
+	setupErrorDescription();
+
 	ConfigMgr configM;
 	configM.readConfig("vlhttpd.json");
 	configM.initPortServer();
-	Sleep(200000);
+	Sleep(2000000);
 }

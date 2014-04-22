@@ -5,11 +5,16 @@ bool FileUtil::do_proc(HttpTask* task)
 {
 	std::string& path = task->LocalPath;
 	FILE* fin ;
+
+	if (task->doCgi)
+		return true;
+	
 	if ((fin= fopen(path.c_str(), "rb")) == NULL)
 	{
 		writeError(task, HTTPErrorCode::NotFound, "", 0);
 		return false;
 	}
+
 	char buf[BUFSIZE];
 	while (!feof(fin))
 	{

@@ -30,7 +30,7 @@ portServer** ConfigMgr::initPortServer()
 
 void portServerConfig::initModRunner(modRunner* runner)
 {
-	runner->addMod(new Router());
+	runner->addMod(new Router(vServerList,numVServer));
 	runner->addMod(new FileUtil());
 	runner->init();
 }

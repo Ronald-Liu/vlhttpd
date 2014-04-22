@@ -7,20 +7,19 @@
 	"vserver":
 	[
 		{	"hostName":"127.0.0.1",
-			"isDefault":true,
 			"defaultPage":"index.html",
 			"rules":[
-				{"URI":"/", "Path":"D:\\"},
-				{"URI":"/static", "Path":"D:\\www"}
+				{"URI":"/", "Path":"D:\\www"},
+				{"URI":"/static", "Path":"D:\\static"},
 			]
 		},
 
 		{
-			"hostName":"srcflow.info",
+			"hostName":"localhost",
 			"defaultPage":"index.html",
 			"rules":[
-				{"URI":"/", "Path":"D:\\local","canCgi":true},
-				{"URI":"/static", "isForbidden":true}
+				{"URI":"/", "Path":"D:\\local"},
+				{"URI":"/static", "Forbidden":true},
 			]
 		}
 	]

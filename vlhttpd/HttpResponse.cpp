@@ -7,11 +7,12 @@ string HttpVersions::http_v1_0 = "HTTP/1.0";
 string HttpVersions::http_v1_1 = "HTTP/1.1";
 
 std::string errorDescription[600];
-void setupErrorDescriptopn(){
+void setupErrorDescription(){
 	errorDescription[HTTPErrorCode::Continue] = "Continue";
 	errorDescription[HTTPErrorCode::Ok] = "OK";
 	errorDescription[HTTPErrorCode::MovedPermanently] = "movedPermanently";
 	errorDescription[HTTPErrorCode::Found] = "found";
+	errorDescription[HTTPErrorCode::NotFound] = "Not Found";
 	errorDescription[HTTPErrorCode::SeeOther] = "see other";
 	errorDescription[HTTPErrorCode::TemporaryRedirect] = "temporary redirect";
 	errorDescription[HTTPErrorCode::BadRequest] = "bad request";

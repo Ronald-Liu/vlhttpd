@@ -19,7 +19,8 @@ public:
 	modRunner* runner;
 	HttpRequest request;
 	DefaultResponse response;
-
+	bool doCgi=false;
+	std::string extName;
 
 	std::string LocalPath;
 
