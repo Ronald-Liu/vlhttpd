@@ -16,6 +16,8 @@ public:
 	std::map<std::string, void*> internData;
 	char* rawData;
 	size_t rawDataLen;
+	USHORT serverPort;
+	std::string hostName;
 	modRunner* runner;
 	HttpRequest request;
 	DefaultResponse response;
