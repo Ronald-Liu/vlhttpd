@@ -82,7 +82,15 @@ bool Router::do_proc(HttpTask* task)
 	std::string hostName = task->request.getHost();
 	int cPos;
 	if ((cPos = hostName.rfind(':')) != std::string::npos)
+	{
 		hostName = hostName.substr(0, cPos);
+		task->serverPort = stoi(hostName.substr(cPos + 1));
+	}
+	else{
+		task->serverPort = 80;
+	}
+
+	task->hostName = hostName;
 	auto p = vServers.find(hostName);
 	if (p != vServers.end())
 		router = p->second;
