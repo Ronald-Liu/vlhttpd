@@ -30,6 +30,10 @@ bool domainRouter::getLocalPath(const std::string& URI, HttpTask* task)
 	size_t length = (**p).URIPattern.size();
 	while (!isSubDir((*p)->URIPattern, URI))
 	{
+		if (p == ruleList.begin())
+		{
+			return false;
+		}
 		p--;
 		if ((*p)->URIPattern.size() > length)
 		{
@@ -83,8 +87,8 @@ bool Router::do_proc(HttpTask* task)
 	int cPos;
 	if ((cPos = hostName.rfind(':')) != std::string::npos)
 	{
-		hostName = hostName.substr(0, cPos);
 		task->serverPort = stoi(hostName.substr(cPos + 1));
+		hostName = hostName.substr(0, cPos);
 	}
 	else{
 		task->serverPort = 80;

@@ -11,6 +11,7 @@
 			"rules":[
 				{"URI":"/", "Path":"D:\\www"},
 				{"URI":"/static", "Path":"D:\\static"},
+				{"URI":"/cgi", "Path":"D:\\cgi"}
 			]
 		},
 
@@ -19,7 +20,7 @@
 			"defaultPage":"index.html",
 			"rules":[
 				{"URI":"/", "Path":"D:\\local"},
-				{"URI":"/static", "Forbidden":true},
+				{"URI":"/static", "Forbidden":true}
 			]
 		}
 	]

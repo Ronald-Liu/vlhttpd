@@ -10,8 +10,9 @@
 			"isDefault":true,
 			"defaultPage":"index.html",
 			"rules":[
-				{"URI":"/", "Path":"D:\\"},
-				{"URI":"/static", "Path":"D:\\www"}
+				{"URI":"/", "Path":"D:\\www"},
+				{"URI":"/static", "Path":"D:\\www"},
+				{"URI":"/cgi", "Path":"D:\\cgi","canCgi":true}
 			]
 		},
 
