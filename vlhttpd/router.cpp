@@ -83,8 +83,8 @@ bool Router::do_proc(HttpTask* task)
 	int cPos;
 	if ((cPos = hostName.rfind(':')) != std::string::npos)
 	{
-		hostName = hostName.substr(0, cPos);
 		task->serverPort = stoi(hostName.substr(cPos + 1));
+		hostName = hostName.substr(0, cPos);
 	}
 	else{
 		task->serverPort = 80;

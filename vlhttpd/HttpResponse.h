@@ -65,7 +65,7 @@ public:
 	//ÊµÌåÄÚÈİ£º
 	void setEntity(char* data, int offset, int len);
 
-	void appendEntity(char* data, int len);
+	void appendEntity(const char* data, int len);
 
 	void clearEntity();
 	void printEntity();
