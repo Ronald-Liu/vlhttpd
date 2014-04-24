@@ -94,9 +94,27 @@ std::string HttpParser::parseRequest(HttpTask *task){
 			}
 		}
 
-		headerLine = split(processStr, "\r\n");
-	}
+		if (key.compare("Content-Type") == 0) {
+			//delete blank 
+			if (headerLine[0] == ' ') {
+				headerLine.erase(0, 1);
+			}
+			request.setContentType(headerLine);
+		}
+		if (key.compare("Content-Length") == 0) {
+			//delete blank 
+			if (headerLine[0] == ' ') {
+				headerLine.erase(0, 1);
+			}
+			request.setContentLength(atoi(headerLine.c_str()));
+		}
 
+		headerLine = split(processStr, "\r\n");
+		
+	}
+	if (request.getRequestMethod() == POST && processStr != "")	{
+		request.setContent(processStr);
+	}
 	return request.getRequestURI();
 }
 //将processStr以分隔符separator分割成两部分，一部分返回，另一部分放到processStr

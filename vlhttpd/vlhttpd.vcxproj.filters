@@ -51,6 +51,9 @@
     <ClInclude Include="ConfigMgr.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CgiController.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpTask.cpp">
@@ -81,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="unittest_configMgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CgiController.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

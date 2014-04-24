@@ -30,6 +30,15 @@ public:
 	bool isEnLanguage() { return en_language; };
 	void setZhLanguage(){ zh_language = true; };
 	bool isZhLanguage() { return zh_language; };
+	//request content
+	std::string getContent(){ return reqContent; };
+	void setContent(std::string con) { reqContent = con; };
+	//content-type
+	std::string getContentType() { return reqContentType; };
+	void setContentType(std::string contentType){ reqContentType = contentType; };
+	//contentLength
+	int getContentLength() { return reqContentLength; };
+	void setContentLength(int len) { reqContentLength = len; };
 
 private:
 	//request method
@@ -46,6 +55,12 @@ private:
 	//accept language
 	bool en_language = false;
 	bool zh_language = false;
+	//request content
+	std::string reqContent;
+	//content-type
+	std::string reqContentType;
+	//content-length
+	int reqContentLength;
 
 };
 #endif
