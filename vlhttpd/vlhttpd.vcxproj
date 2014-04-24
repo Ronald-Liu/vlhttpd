@@ -87,6 +87,7 @@
     <ClInclude Include="HttpTask.h" />
     <ClInclude Include="mod.h" />
     <ClInclude Include="netfront.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="router.h" />
     <ClInclude Include="vServer.h" />
   </ItemGroup>
@@ -102,6 +103,9 @@
     <ClCompile Include="router.cpp" />
     <ClCompile Include="unittest_configMgr.cpp" />
     <ClCompile Include="vServer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="vlhttpd.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,19 +1,21 @@
 #pragma once
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <string>
 #include "HttpRequest.h"
-class CgiController{
+#include "HttpTask.h"
+#include "mod.h"
+class CgiOutput;
+class CgiController:public mod{
 public:
-	CgiController(std::string cgiFilePath, HttpRequest *request);
-	std::string CgiScriptRun();
-private:
-	void initEnvironmentVariables();
-	//uri contains params then return true;
-	bool fetchParams(std::string uri, std::string* params);
-	void setPostValue();
-	std::string cgiFilePath;
-	std::string serverName;
-	HttpRequest *request;
-	char *pipeValue;
-	std::string postValue;
+	bool CgiScriptRun(HttpTask *task, CgiOutput* cgiout);
+	bool do_proc(HttpTask* task);
+};
+
+class CgiOutput {
+public:
+	char *data;
+	int length;
+	CgiOutput(int length);
+	~CgiOutput();
 };

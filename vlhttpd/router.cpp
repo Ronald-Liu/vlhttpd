@@ -30,6 +30,10 @@ bool domainRouter::getLocalPath(const std::string& URI, HttpTask* task)
 	size_t length = (**p).URIPattern.size();
 	while (!isSubDir((*p)->URIPattern, URI))
 	{
+		if (p == ruleList.begin())
+		{
+			return false;
+		}
 		p--;
 		if ((*p)->URIPattern.size() > length)
 		{

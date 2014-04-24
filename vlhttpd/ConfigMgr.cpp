@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "HttpTask.h"
+#include "CgiController.h"
 #include "mod.h"
 
 void ConfigMgr::readConfig(const char* fName)
@@ -32,6 +33,7 @@ void portServerConfig::initModRunner(modRunner* runner)
 {
 	runner->addMod(new Router(vServerList,numVServer));
 	runner->addMod(new FileUtil());
+	runner->addMod(new CgiController());
 	runner->init();
 }
 
