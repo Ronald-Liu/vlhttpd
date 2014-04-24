@@ -161,15 +161,17 @@ bool CgiController::CgiScriptRun(HttpTask *task, CgiOutput *cgiout){
 			memcpy(&cgiout->data[pos], readBuf, bytesRead);
 		}
 		pos += bytesRead;
-		if (bytesRead < BUF_SIZE)
-			break;
+	//	if (bytesRead < BUF_SIZE)
+	//		break;
 	}
 
 	CloseHandle(hRead);
 	CloseHandle(hProcess);
+	/*
 	if (!bSuccess){
 		writeError(task, HTTPErrorCode::InternalServerError, NULL, 0);
 		return false;
 	}
+	*/
 	return true;
 }
