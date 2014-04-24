@@ -8,6 +8,12 @@ bool FileUtil::do_proc(HttpTask* task)
 
 	if (task->doCgi)
 		return true;
+
+	if (task->request.getRequestMethod() != RequestMethod::GET)
+	{
+		writeError(task, HTTPErrorCode::notImplement, "", 0);
+		return false;
+	}
 	
 	if ((fin= fopen(path.c_str(), "rb")) == NULL)
 	{

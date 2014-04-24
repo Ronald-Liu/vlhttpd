@@ -5,6 +5,7 @@ char* err = "Error";
 void mod::writeError(HttpTask* task, HTTPErrorCode errNo, char* data, size_t len)
 {
 	task->response.setStatus(errNo);
+	task->response.appendEntity(errorDescription[errNo].c_str(),errorDescription[errNo].size());
 	task->response.writeBack(task);
 #ifdef DEBUG
 	std::cout << "Error" << errNo;
