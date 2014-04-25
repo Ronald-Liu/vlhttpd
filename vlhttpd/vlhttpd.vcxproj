@@ -104,9 +104,6 @@
     <ClCompile Include="unittest_configMgr.cpp" />
     <ClCompile Include="vServer.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="vlhttpd.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

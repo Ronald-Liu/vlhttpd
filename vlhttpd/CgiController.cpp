@@ -7,18 +7,21 @@ CgiOutput::CgiOutput(int len){
 	memset(data, NULL, len);
 }
 CgiOutput::~CgiOutput(){
-	delete data;
+	free(data);
 }
 
 bool CgiController::do_proc(HttpTask *task){
+	if (!task->doCgi)
+		return true;
 	CgiOutput cgiout(1024);
 	DWORD bytesWtn;
 	if (CgiScriptRun(task, &cgiout)) {
-		HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+		/*HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (!WriteFile(out, cgiout.data, cgiout.length, &bytesWtn, NULL)){
 			cout << GetLastError() << endl;
 			return false;
-		}
+		}*/
+		task->writeBack(cgiout.data, cgiout.length);
 	}
 	return true;
 }
@@ -61,7 +64,10 @@ void initEnvironmentVariables(HttpTask *task){
 	if (request->getRequestMethod() == GET)
 		SetEnvironmentVariableA("REQUEST_METHOD", "GET");
 	else
+	{
+		SetEnvironmentVariableA("CONTENT_LENGTH", int2str(task->request.getContentLength()).c_str());
 		SetEnvironmentVariableA("REQUEST_METHOD", "POST");
+	}
 }
 
 //运行CGI程序
@@ -102,6 +108,10 @@ bool CgiController::CgiScriptRun(HttpTask *task, CgiOutput *cgiout){
 	si.hStdOutput = hWrite;
 	si.hStdError = hWrite;
 
+	if (task->extName == ".py")
+	{
+		cgiFilePath = "python.exe " + cgiFilePath;
+	}
 	//创建子进程
 	bSuccess = CreateProcessA(NULL,
 		(LPSTR)(LPCSTR)cgiFilePath.c_str(), NULL,
@@ -144,6 +154,7 @@ bool CgiController::CgiScriptRun(HttpTask *task, CgiOutput *cgiout){
 
 	CHAR readBuf[BUF_SIZE];
 	ZeroMemory(readBuf, BUF_SIZE);
+	int nLength = 0;
 	DWORD bytesRead = 0;
 	DWORD pos = 0;
 	//父进程读管道
@@ -164,6 +175,8 @@ bool CgiController::CgiScriptRun(HttpTask *task, CgiOutput *cgiout){
 	//	if (bytesRead < BUF_SIZE)
 	//		break;
 	}
+
+	cgiout->length = pos;
 
 	CloseHandle(hRead);
 	CloseHandle(hProcess);
