@@ -2,6 +2,7 @@
 #include "http.h"
 #include "HttpResponse.h"
 #include "HttpTask.h"
+#include "filename_or_surfix_2_MIME.h"
 
 string HttpVersions::http_v1_0 = "HTTP/1.0";
 string HttpVersions::http_v1_1 = "HTTP/1.1";
@@ -127,6 +128,11 @@ bool HttpResponse::writeBack(HttpTask* task)
 {
 	if (headers.find("Content-Length") == headers.end())
 		addHeader("Content-Length", entityLen);
+	std::string mime = X_utils::surfix2mime(task->extName);
+	if (mime != "")
+	{
+		addHeader("Content-Type", mime);
+	}
 	string header = getStarterHeader();
 	task->writeBack(header.c_str(), header.size());
 	task->writeBack(entityData, entityLen);

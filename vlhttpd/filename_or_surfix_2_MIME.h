@@ -1,7 +1,4 @@
-// Surfix2MIME.cpp : 定义控制台应用程序的入口点。
-//
-
-#include "stdafx.h"
+#pragma once
 #include <string>
 #include <cctype>
 #include <algorithm>
@@ -14,7 +11,6 @@ public:
 			return "";
 		if(surfix.at(0)!='.')
 			surfix = '.'+surfix;
-		std::transform(surfix.begin(),surfix.end(),surfix.begin(),::tolower);
 
 		if(surfix == ".323")
 			return "text/h323";
@@ -991,12 +987,4 @@ public:
 		return surfix2mime(name.substr(lastDot,(name.length())-1));
 	}
 };
-
-int _tmain(int argc, _TCHAR* argv[])
-{
-	std::string filename = "whatever.Html";
-	printf("%s\r\n",X_utils::name2mime(filename).c_str());
-	getchar();
-	return 0;
-}
 

@@ -79,6 +79,7 @@
     <ClInclude Include="CgiController.h" />
     <ClInclude Include="ConfigMgr.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="filename_or_surfix_2_MIME.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="HttpParser.h" />
